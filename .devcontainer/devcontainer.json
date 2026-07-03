@@ -36,7 +36,7 @@
 	"onCreateCommand": "mkdir -p data",
 
 	// Use 'postCreateCommand' to run commands once after the container is created
-	"postCreateCommand": "pip install -r requirements.txt",
+	"postCreateCommand": "pip install --upgrade pip && pip install -r requirements.txt",
 
 	// Use 'postAttachCommand' to run commands each time a user connects to the container
 	"postAttachCommand": ""
