@@ -1,24 +1,41 @@
-name: CD
+# Work on dev branch -> PR (tests) -> Merge to main -> Submit submission.csv 
+name: Submit to Kaggle
 
+# Event trigger for the workflow
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version to release (e.g. 4.1.0)'
-        required: true
-        type: string
+  pull_request:
+    types:
+      - closed
+    branches:
+      - main
 
+# List of jobs to run
 jobs:
-  release:
-  name: Release to Kaggle and Github
-  runs-on: ubuntu-latest
+  submit_predictions:
 
-  permissions:
-    contents: write # Required to create a github release
+  # Sequence of steps to submit predictions
+  steps:
 
-  env:
-    KAGGLE_USERNAME:
-    KAGGLE_KEY:
-    VERSION:
-    DATASET_NAME:
-    KERNEL_NAME:
+    # Checkout code from the repo
+    - name: Checkout
+      uses: actions//checkout@v7.0.0
+
+    # Setup Python
+    - name: Setup Python
+      uses: actions/setup-python@v6.3.0
+      with:
+        python-version: "3.12"
+
+    # Install Kaggle CLI
+    - name: Install Kaggle CLI
+      run: pip install --no-cache-dir kaggle
+
+    # Authenticate Kaggle CLI
+    - name: Authenticate Kaggle CLI
+      env:
+        KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+        KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+
+    # Submit predictions CSV
+    - name: Submit to competition
+      run: kaggle competitions submit -c playground-series-s6e7 -f ../data/submission.csv -m "Submission from GitHub Actions"
