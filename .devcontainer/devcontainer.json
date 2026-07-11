@@ -18,6 +18,10 @@
 			// Set the default Python interpreter
 			"python.defaultInterpreterPath": "/usr/local/bin/python",
 
+			// Exclude system Python 3.13 environment
+			// Prevents confusion by hiding system Python versions we don't want to use
+			"jupyter.kernels.excludePythonEnvironments": ["/usr/local/bin/python3"],
+
 			// Disable automatic port forwarding and restoration of forwarded ports
 			// from prior sessions to give explicit control
 			"remote.restoreForwardedPorts": false,
